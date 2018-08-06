@@ -1,0 +1,52 @@
+<script>
+    $(function(){
+        var vue = new Vue({
+            el:'#accordion',
+            data:{
+                powers : admin.powers,
+                parents : []
+            },
+            methods : {
+                gmenu : function(){
+                    var that = this;
+                    $.each(that.powers,function(i,p){
+                        if(p.pid==0){
+                            that.parents.push(p);
+                        }
+                    })
+                }
+            }
+        })
+        vue.gmenu();
+    })
+</script>
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-info">
+        <div class="panel-heading" role="tab" id="index">
+            <h4 class="panel-title">
+                <a role="button" href="index.html">
+                    <i class="glyphicon glyphicon-home"></i> 首页
+                </a>
+            </h4>
+        </div>
+    </div>
+
+    <div class="panel panel-info" v-for="(p,index) in parents">
+        <div class="panel-heading" role="tab" :id="'heading'+index">
+            <h4 class="panel-title">
+                <a role="button" data-toggle="collapse" data-parent="#accordion" :href="'#collapse'+index" aria-expanded="true" :aria-controls="'collapse'+index">
+                   <i :class="p.icon"></i> {{p.pname}}
+                </a>
+            </h4>
+        </div>
+        <div :id="'collapse'+index" class="panel-collapse collapse" role="tabpanel" :aria-labelledby="'heading'+index">
+            <div class="panel-body">
+                <p v-for="s in powers" v-if="s.pid==p.id">
+                    <a :href="s.url">
+                        <i :class="s.icon"></i> {{s.pname}}
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
